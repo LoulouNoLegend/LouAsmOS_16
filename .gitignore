@@ -1,0 +1,6 @@
+# Compiled binaries and object files
+*.o
+*.bin
+
+# Other
+*.bak

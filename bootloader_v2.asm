@@ -14,7 +14,7 @@ start:
     int 0x10        ; BIOS clears screen automatically
 
     ; Print Message
-    mov si, msg_normal      ; SI: 16-Bit register pointing to current position in the string
+    mov si, msg_normal      ; SI: 16-Bit register pointing to string
     call print_normal
 
     ; Print New Line
@@ -30,6 +30,10 @@ start:
     call print_color
     
     jmp $           ; Keep the bootloader running
+
+loop:
+    mov al, 0x0D    ; cursor pos 0
+    int 0x10
 
 ;---------------------------
 print_normal:

@@ -20,7 +20,21 @@ Color Codes:
 
 AH = 09h
 AL = character to print
-BH = page number (0)
 BL = color attribute byte
 CX = repeat count
 INT 10h
+
+AH = 0Eh
+
+INT 10h / AH = 02h sets the cursor position
+BH = page
+DH = row
+DL = column
+
+VGA text memory:
+    Segment: 0xB800
+    Physical: 0xB8000
+
+Cursor:
+    column 0: 0x0D
+    down one line: 0x0A

@@ -33,24 +33,24 @@ main_menu:
 
     mov si, msg_title
     mov bl, 0x09
-    call print_color
+    call print_attr
     
     call newline_tty
     mov si, msg_opt1
-    call print_normal
+    call print_tty
     
     call newline_tty
     mov si, msg_opt2
-    call print_normal
+    call print_tty
 
     call newline_tty
     mov si, msg_opt3
-    call print_normal
+    call print_tty
     
     call newline_tty
     call newline_tty
     mov si, msg_prompt
-    call print_normal
+    call print_tty
 
     call read_key
 
@@ -93,7 +93,7 @@ disk_error:
     call clear_screen
     mov si, msg_disk_err
     mov bl, 0x0C
-    call print_color
+    call print_attr
     jmp $
 
 ;---------------------------
@@ -101,12 +101,12 @@ show_about:
     call clear_screen
 
     mov si, msg_about
-    call print_normal
+    call print_tty
 
     call newline_tty
     call newline_tty
     mov si, msg_anykey
-    call print_normal
+    call print_tty
 
     ; wait for key and go back to menu
     call read_key
@@ -117,71 +117,12 @@ show_halt:
 
     mov si, msg_halt
     mov bl, 0x0A
-    call print_color
+    call print_attr
 
     jmp $   ; freeze forever aaaa
-
-;---------------------------
-newline_tty:
-    mov ah, 0x0E     ; tty mode / reset AH
-    mov al, 0x0D
-    int 0x10
-    mov al, 0x0A
-    int 0x10
-    ret
-
-; Read one key from keyboard (blocking)
-; Return: AL = ASCII code
-read_key:
-    mov ah, 0x00    ; BIOS: wait for key
-    int 0x16        ; AH=scan code, AL=ASCII
-    ret
-
-clear_screen:
-    ; Text mode 80x25, clear screen
-    mov ax, 0x0003  ; 00: VideoMode / 03: 80x25
-    int 0x10
-    ret
-;---------------------------
-print_normal:
-    mov ah, 0x0E
-
-.print_normal_loop:
-    lodsb
-    cmp al, 0
-    je .done_normal
-    int 0x10
-    jmp .print_normal_loop
-
-.done_normal:
-    ret
-
 ;----------------------------
-print_color:
-    mov byte [color_x], 0
-.print_color_loop:
-    lodsb
-    cmp al, 0
-    je .done_color
 
-    mov ah, 0x02
-    mov bh, 0
-    mov dh, 0
-    mov dl, [color_x]
-    int 0x10
-
-    mov ah, 0x09
-    mov bh, 0
-    mov cx, 1
-    int 0x10
-
-    inc byte [color_x]
-
-    jmp .print_color_loop
-
-.done_color:
-    ret
-;----------------------------
+%include "functions.asm"
 
 msg_title  db "LAOS Micro-OS v0", 0
 msg_opt1   db "[1] Launch Kernel", 0
@@ -195,7 +136,6 @@ msg_anykey db "Press any key to return to menu.", 0
 msg_halt   db "System halted. You can turn off the machine now.", 0
 msg_disk_err db "Disk read error while loading kernel.", 0
 
-color_x db 0
 boot_drive   db 0
 
 ; Placing 510 zeros, minus the size of the code above

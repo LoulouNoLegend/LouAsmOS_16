@@ -14,7 +14,7 @@ kernel_start:
     mov sp, 0xFFF0  ; Simple stack inside the segment
     sti
 
-    call clear_scren
+    call clear_screen
 
     ; Reset cursor and print text
     mov ah, 0x02
@@ -29,38 +29,9 @@ kernel_start:
     jmp $
 
 ;---------------------------
-newline_tty:
-    mov ah, 0x0E
-    mov al, 0x0D
-    int 0x10
-    mov al, 0x0A
-    int 0x10
-    ret
 
-read_key:
-    mov ah, 0x00
-    int 0x16
-    ret
+%include "functions.asm"
 
-clear_scren:
-    mov ax, 0x0003
-    int 0x10
-    ret
-
-;---------------------------
-print_tty:
-    mov ah, 0x0E
-.ploop:
-    lodsb
-    cmp al, 0
-    je .done
-    int 0x10
-    jmp .ploop
-.done:
-    ret
-
-;---------------------------
-
-msg_is_running db "LAOS kernel is now running, but there's nothing here yet! :)", 0
+msg_is_running db "LAOS kernel is now running, but there's nothing here yet! x_x", 0
 
 times 512 - ($ - $$) db 0

@@ -52,6 +52,38 @@ done:
     ret
 
 ;---------------------------
+cmp_str:
+    push si
+    push di
+    push ax
+    push bx
+.cmp_loop:
+    mov al, [si]    ; AL = char string 1
+    mov bl, [di]    ; BL = Char string 2
+
+    cmp al, bl
+    jne .not_equal
+
+    cmp al, 0
+    je .equal
+
+    inc si
+    inc di
+    jmp .cmp_loop
+
+.equal:
+    mov al, 1
+    jmp .end
+
+.not_equal:
+    mov al, 0
+
+.end:
+    pop bx
+    pop ax
+    pop di
+    pop si
+    ret
 ;---------------------------
 
 color_x db 0

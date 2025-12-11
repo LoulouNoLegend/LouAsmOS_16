@@ -23,15 +23,26 @@ kernel_start:
     mov dl, 0
     int 0x10
 
-    mov si, msg_is_running
-    call print_tty
+    mov si, msg_title
+    mov bl, 0x09
+    call print_attr
 
-    jmp $
+    call newline_tty
+    call newline_tty
 
+    call cmd_loop
+
+hang:
+    jmp hang
+
+;---------------------------
 ;---------------------------
 
 %include "src/common/functions.asm"
+;%include "src/kernel/memory/mem_info.asm"
+%include "src/kernel/cmd/cmd_main.asm"
 
-msg_is_running db "LAOS kernel is now running, but there's nothing here yet! x_x", 0
+msg_title  db "LAOS Kernel", 0
+msg_is_running db "LAOS kernel is now running!", 0
 
 ;times 512 - ($ - $$) db 0

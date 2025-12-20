@@ -42,7 +42,7 @@ cmd_loop:
 .do_clear:
     ;call clear_screen
     ;jmp cmd_loop
-    jmp kernel_start    ; only for now, because it's not optimal at all.
+    jmp kernel_start    ; only for now, because it's not optimal at all (but the title stays)
 
 .do_help:
     mov si, msg_cmd_help
@@ -55,6 +55,7 @@ cmd_loop:
     mov si, msg_cmd_halt
     call print_tty
     call newline_tty
+
 .halt_loop:
     jmp .halt_loop
 

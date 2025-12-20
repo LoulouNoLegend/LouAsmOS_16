@@ -1,4 +1,4 @@
-cmd_loop:
+shell_loop:
     mov si, cmd_prompt
     call print_tty
 
@@ -8,7 +8,7 @@ cmd_loop:
     mov si, cmd_buffer
     mov al, [si]
     cmp al, 0
-    je cmd_loop
+    je shell_loop
 
     ; clear
     mov si, cmd_buffer
@@ -31,17 +31,24 @@ cmd_loop:
     cmp al, 1
     je .do_halt
 
+    ; meow
+    mov si, cmd_buffer
+    mov di, cmd_meow
+    call cmp_str
+    cmp al, 1
+    je .run_meow
+
     ; else: incognito commando
     mov si, msg_cmd_unknown
     call print_tty
     call newline_tty
     call newline_tty
-    jmp cmd_loop
+    jmp shell_loop
 
 ; commands
 .do_clear:
     ;call clear_screen
-    ;jmp cmd_loop
+    ;jmp shell_loop
     jmp kernel_start    ; only for now, because it's not optimal at all (but the title stays)
 
 .do_help:
@@ -49,15 +56,23 @@ cmd_loop:
     call print_tty
     call newline_tty
     call newline_tty
-    jmp cmd_loop
+    jmp shell_loop
 
 .do_halt:
     mov si, msg_cmd_halt
     call print_tty
     call newline_tty
+    jmp .halt_loop
 
 .halt_loop:
     jmp .halt_loop
+
+; ---------------------
+; COMMANDS RUN
+.run_meow:
+    call shell_cc_meow
+    jmp shell_loop
+;-------------------
 
 read_line:
     ; Save used registers (push)
@@ -120,14 +135,17 @@ read_line:
     
     jmp .read_loop
 
+%include "src/kernel/shell/commands/_include.asm"
+
 ;---------------------
 ; Values
 cmd_buffer times 32 db 0    ; 32o for CMD
 
-cmd_mem db "mem", 0
+cmd_mem db "mem", 0 ; TODO: Command to show memory
 cmd_clear db "clear", 0
 cmd_help db "help", 0
 cmd_halt db "halt", 0
+cmd_meow db "meow", 0
 
 cmd_prompt db "LAOS> ", 0
 msg_cmd_unknown db "Unknown command.", 0

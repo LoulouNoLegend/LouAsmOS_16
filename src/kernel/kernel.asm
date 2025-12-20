@@ -30,7 +30,7 @@ kernel_start:
     call newline_tty
     call newline_tty
 
-    call cmd_loop
+    call shell_loop
 
 hang:
     jmp hang
@@ -40,9 +40,11 @@ hang:
 
 %include "src/common/functions.asm"
 ;%include "src/kernel/memory/mem_info.asm"
-%include "src/kernel/cmd/cmd_main.asm"
+%include "src/kernel/shell/cmd_main.asm"
 
 msg_title  db "LAOS Kernel", 0
 msg_is_running db "LAOS kernel is now running!", 0
 
 ;times 512 - ($ - $$) db 0
+KERNEL_SECTORS equ 8
+times (512*KERNEL_SECTORS) - ($ - $$) db 0

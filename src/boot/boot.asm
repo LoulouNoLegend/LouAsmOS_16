@@ -20,14 +20,13 @@ launch_kernel:
     xor bx, bx
 
     mov ah, 0x02
-    mov al, 1
+    mov al, 8
     mov ch, 0
     mov cl, 2
     mov dh, 0
     mov dl, [boot_drive]
     int 0x13
     jc disk_error
-
     jmp 0x1000:0x0000
 
 disk_error:

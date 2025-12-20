@@ -22,34 +22,49 @@ print_tty:
     .print_loop:
         lodsb
         cmp al, 0
-        je done
+        je .done
         int 0x10
         jmp .print_loop
+    .done:
+        ret
 
 print_attr:
-    mov byte [color_x], 0
-    .print_attr_loop:
-        lodsb
-        cmp al, 0
-        je done
+    push ax
+    push bx
+    push cx
+    push dx
+    push bp
+    push di
+    push es
 
-        mov ah, 0x02
-        mov bh, 0
-        mov dh, 0
-        mov dl, [color_x]
+    mov di, si
+    xor cx, cx
+
+    .len:
+        cmp byte [di], 0
+        je .go
+        inc di
+        inc cx
+        jmp .len
+
+    .go:
+        mov ax, ds
+        mov es, ax
+        mov bp, si
+
+        mov ah, 0x13
+        mov al, 0x01
+        mov bh, 0x00
         int 0x10
 
-        mov ah, 0x09
-        mov bh, 0
-        mov cx, 1
-        int 0x10
-
-        inc byte [color_x]
-
-        jmp .print_attr_loop
-
-done:
-    ret
+        pop es
+        pop di
+        pop bp
+        pop dx
+        pop cx
+        pop bx
+        pop ax
+        ret
 
 ;---------------------------
 cmp_str:

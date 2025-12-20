@@ -1,0 +1,1 @@
+%include "src/kernel/shell/commands/meow.asm"

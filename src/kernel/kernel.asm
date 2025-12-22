@@ -39,12 +39,13 @@ hang:
 ;---------------------------
 
 %include "src/common/functions.asm"
+%include "src/common/rand.asm"
 ;%include "src/kernel/memory/mem_info.asm"
 %include "src/kernel/shell/cmd_main.asm"
 
-msg_title  db "LAOS Kernel", 0
+msg_title db "LAOS Kernel", 0
 msg_is_running db "LAOS kernel is now running!", 0
 
-;times 512 - ($ - $$) db 0
+; 8 sectors!!!!
 KERNEL_SECTORS equ 8
 times (512*KERNEL_SECTORS) - ($ - $$) db 0

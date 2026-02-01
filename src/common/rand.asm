@@ -5,10 +5,10 @@ get_rand_16bit:
     mov ax, [rand_seed] ; copies the seed from memory into AX
 
     mov dx, 0x6255      ; Put constant multiplier in DX
-    mul dx              ; Multiply AX by DX
+    mul dx              ; Multiply AX by DX (God do I love AX being hardcoded)
     add ax, 0x3619      ; AX = AX + increment (mod 65536)
 
-    xor ax, dx          ; mix high word into low word (i saw it was better for LCG)
+    xor ax, dx          ; mix high word into low word (mix the high bits chaos to the weak low bits)
     mov [rand_seed], ax ; save new value in memory
 
     pop dx      ; Restore DX

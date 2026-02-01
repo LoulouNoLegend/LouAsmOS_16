@@ -38,6 +38,13 @@ shell_loop:
     cmp al, 1
     je .run_meow
 
+    ; random number
+    ;mov si, cmd_buffer
+    ;mov di, cmd_random_number
+    ;call cmp_str
+    ;cmp al, 1
+    ;je .run_random_number
+
     ; else: incognito commando
     mov si, msg_cmd_unknown
     call print_tty
@@ -73,6 +80,11 @@ shell_loop:
     call shell_cc_meow
     call newline_tty
     jmp shell_loop
+
+;.run_random_number:
+;    call shell_random_number
+;    call newline_tty
+;    jmp shell_loop
 ;-------------------
 
 read_line:
@@ -147,6 +159,7 @@ cmd_clear db "clear", 0
 cmd_help db "help", 0
 cmd_halt db "halt", 0
 cmd_meow db "meow", 0
+cmd_random_number db "randomNumber", 0
 
 cmd_prompt db "LAOS> ", 0
 msg_cmd_unknown db "Unknown command.", 0

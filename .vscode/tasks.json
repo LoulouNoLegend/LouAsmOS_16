@@ -4,11 +4,20 @@
     {
       "label": "Build & Run (boot only)",
       "type": "shell",
-      "command": "cmd",
-      "args": [
-        "/c",
-        "nasm -f bin \"${workspaceFolder}\\src\\boot\\boot.asm\" -o \"${workspaceFolder}\\build\\boot.bin\" && qemu-system-i386 -drive format=raw,file=\"${workspaceFolder}\\build\\boot.bin\""
-      ],
+      "windows": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "mkdir build 2>nul & nasm -f bin \"${workspaceFolder}\\src\\boot\\boot.asm\" -o \"${workspaceFolder}\\build\\boot.bin\" && qemu-system-i386 -drive format=raw,file=\"${workspaceFolder}\\build\\boot.bin\""
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "mkdir -p \"${workspaceFolder}/build\" && nasm -f bin \"${workspaceFolder}/src/boot/boot.asm\" -o \"${workspaceFolder}/build/boot.bin\" && qemu-system-i386 -drive format=raw,file=\"${workspaceFolder}/build/boot.bin\""
+        ]
+      },
       "group": {
         "kind": "build",
         "isDefault": false
@@ -18,11 +27,20 @@
     {
       "label": "Build OS (boot + kernel) & Run",
       "type": "shell",
-      "command": "cmd",
-      "args": [
-        "/c",
-        "nasm -f bin \"${workspaceFolder}\\src\\boot\\boot.asm\" -o \"${workspaceFolder}\\build\\boot.bin\" && nasm -f bin \"${workspaceFolder}\\src\\kernel\\kernel.asm\" -o \"${workspaceFolder}\\build\\kernel.bin\" && copy /b \"${workspaceFolder}\\build\\boot.bin\"+\"${workspaceFolder}\\build\\kernel.bin\" \"${workspaceFolder}\\build\\laos.img\" && qemu-system-i386 -drive format=raw,file=\"${workspaceFolder}\\build\\laos.img\""
-      ],
+      "windows": {
+        "command": "cmd",
+        "args": [
+          "/c",
+          "mkdir build 2>nul & nasm -f bin \"${workspaceFolder}\\src\\boot\\boot.asm\" -o \"${workspaceFolder}\\build\\boot.bin\" && nasm -f bin \"${workspaceFolder}\\src\\kernel\\kernel.asm\" -o \"${workspaceFolder}\\build\\kernel.bin\" && copy /b \"${workspaceFolder}\\build\\boot.bin\"+\"${workspaceFolder}\\build\\kernel.bin\" \"${workspaceFolder}\\build\\laos.img\" && qemu-system-i386 -drive format=raw,file=\"${workspaceFolder}\\build\\laos.img\""
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "mkdir -p \"${workspaceFolder}/build\" && nasm -f bin \"${workspaceFolder}/src/boot/boot.asm\" -o \"${workspaceFolder}/build/boot.bin\" && nasm -f bin \"${workspaceFolder}/src/kernel/kernel.asm\" -o \"${workspaceFolder}/build/kernel.bin\" && cat \"${workspaceFolder}/build/boot.bin\" \"${workspaceFolder}/build/kernel.bin\" > \"${workspaceFolder}/build/laos.img\" && qemu-system-i386 -drive format=raw,file=\"${workspaceFolder}/build/laos.img\""
+        ]
+      },
       "group": {
         "kind": "build",
         "isDefault": true

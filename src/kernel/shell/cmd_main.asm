@@ -1,3 +1,5 @@
+; FIXME: Comands are not case sensitive + no parameters
+
 shell_loop:
     mov si, cmd_prompt
     call print_tty
@@ -56,7 +58,7 @@ shell_loop:
 .do_clear:
     ;call clear_screen
     ;jmp shell_loop
-    jmp kernel_start    ; only for now, because it's not optimal at all (but the title stays)
+    jmp kernel_start    ; FIXME: Resets everything + stack, not efficient
 
 .do_help:
     mov si, msg_cmd_help
@@ -152,7 +154,7 @@ read_line:
 
 ;---------------------
 ; Values
-cmd_buffer times 32 db 0    ; 32o for CMD
+cmd_buffer times 32 db 0    ; 32o for CMD // FIXME: hardcoded
 
 cmd_mem db "mem", 0 ; TODO: Command to show memory
 cmd_clear db "clear", 0
@@ -163,5 +165,5 @@ cmd_random_number db "randomNumber", 0
 
 cmd_prompt db "LAOS> ", 0
 msg_cmd_unknown db "Unknown command.", 0
-msg_cmd_help db "Commands: mem, clear, help, halt", 0
+msg_cmd_help db "Commands: clear, help, halt", 0
 msg_cmd_halt db "Kernel halted. You can reset the machine.", 0

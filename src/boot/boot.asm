@@ -14,7 +14,7 @@ start:
 
     call clear_screen
 
-launch_kernel:
+launch_kernel: ; FIXME: Hardcoded sector count (8 sectors)
     mov ax, 0x1000
     mov es, ax
     xor bx, bx
@@ -29,7 +29,7 @@ launch_kernel:
     jc disk_error
     jmp 0x1000:0x0000
 
-disk_error:
+disk_error: ; FIXME: No disk read retry logic
     call clear_screen
     mov si, boot_msg_disk_err
     call print_tty

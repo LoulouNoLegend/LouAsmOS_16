@@ -1,4 +1,4 @@
-rand_seed dw 12345
+rand_seed dw 12345 ; FIXME: Constant seed
 
 get_rand_16bit:
     push dx     ; save dx on the stack

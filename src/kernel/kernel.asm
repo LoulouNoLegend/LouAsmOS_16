@@ -1,17 +1,21 @@
 ; LAOS kernel v0
 ; Loaded at 0x1000:0000 by bootloader
 
+; TODO: Separate UI from Logic
+; TODO: Stop relying on BIOS. Track cursor, more controls..
+; TODO: Add error strategies/handling
+
 bits 16
 org 0x0000
 
 kernel_start:
     ; Reset the stack and all
     cli
-    mov ax, 0x1000
+    mov ax, 0x1000 ; FIXME: Hardcoded segment
     mov ds, ax
     mov es, ax
     mov ss, ax
-    mov sp, 0xFFF0  ; Simple stack inside the segment
+    mov sp, 0xFFF0  ; Simple stack inside the segment // FIXME: No stack overflow protection
     sti
 
     call clear_screen
@@ -28,12 +32,17 @@ kernel_start:
     call print_attr
 
     call newline_tty
+    mov si, msg_separator
+    call print_tty
+    int 0x10
+
+    call newline_tty
     call newline_tty
 
     call shell_loop
 
 hang:
-    jmp hang
+    jmp hang ; FIXME: No reboot, no soft reset.. just infinite hang loop.
 
 ;---------------------------
 ;---------------------------
@@ -43,9 +52,10 @@ hang:
 ;%include "src/kernel/memory/mem_info.asm"
 %include "src/kernel/shell/cmd_main.asm"
 
-msg_title db "LAOS Kernel", 0
+msg_title db "LAOS Kernel v0", 0
+msg_separator db "==============", 0
 msg_is_running db "LAOS kernel is now running!", 0
 
 ; 8 sectors!!!!
-KERNEL_SECTORS equ 8
+KERNEL_SECTORS equ 8 ; FIXME: If it missmatches bootloader --> rip memory
 times (512*KERNEL_SECTORS) - ($ - $$) db 0

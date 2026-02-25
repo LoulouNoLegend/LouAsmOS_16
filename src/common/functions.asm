@@ -1,3 +1,4 @@
+; TODO: Preserve registers used
 newline_tty:
     mov ah, 0x0E
     mov al, 0x0D
@@ -17,7 +18,7 @@ clear_screen:
     ret
 
 ;---------------------------
-print_tty:
+print_tty: ; FIXME: does not preserve registers (SI/AL)
     mov ah, 0x0E
     .print_loop:
         lodsb
@@ -28,7 +29,7 @@ print_tty:
     .done:
         ret
 
-print_attr:
+print_attr: ; FIXME: No cursor position handling
     push ax
     push bx
     push cx

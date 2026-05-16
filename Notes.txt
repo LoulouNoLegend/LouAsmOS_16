@@ -1,3 +1,13 @@
+Physical Address = segment * 16 + offset
+
+SS = Segment where is the box (somewhere from 0x6000 to 0x9000, free from touching the rest of memory)
+SP = Pointer to the top of the box (0xFFFF --> top: ready to go down)
+
+WHY CANT WE JUST PUT VALUES IN SS, DS, ES, etc:
+- because of how old CPUs worked, it blocked it: need to pass by a register
+
+AX is like a transit register for values
+
 Color Codes:
     0x0     Black
     0x1     Blue
